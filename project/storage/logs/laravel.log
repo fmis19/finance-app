@@ -1,0 +1,21 @@
+[2024-12-11 17:05:21] local.ERROR: Command "config:cahce" is not defined.
+
+Did you mean one of these?
+    config:cache
+    config:clear
+    config:publish
+    config:show {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"config:cahce\" is not defined.
+
+Did you mean one of these?
+    config:cache
+    config:clear
+    config:publish
+    config:show at C:\\Users\\filip\\Desktop\\finance-app\\vendor\\symfony\\console\\Application.php:726)
+[stacktrace]
+#0 C:\\Users\\filip\\Desktop\\finance-app\\vendor\\symfony\\console\\Application.php(284): Symfony\\Component\\Console\\Application->find('config:cahce')
+#1 C:\\Users\\filip\\Desktop\\finance-app\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 C:\\Users\\filip\\Desktop\\finance-app\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(198): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 C:\\Users\\filip\\Desktop\\finance-app\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 C:\\Users\\filip\\Desktop\\finance-app\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#5 {main}
+"} 
