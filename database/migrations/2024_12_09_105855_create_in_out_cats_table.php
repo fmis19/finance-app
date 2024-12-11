@@ -8,11 +8,12 @@ return new class extends Migration
     public function up()
     {
         DB::statement("
-        CREATE TABLE IN_OUT_CATS (
+        CREATE TABLE IN_OUT_CATS
+            (
             in_out_cat_id INT AUTO_INCREMENT PRIMARY KEY,
-            type ENUM('income', 'outcome'), 
+            type ENUM('income', 'expense'),
             name VARCHAR(100) NOT NULL
-        );
+            );
     ");
     }
 

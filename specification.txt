@@ -1,0 +1,44 @@
+U sustavu postoje 2 ULOGE: admin i user.
+Svaka uloga se mora prijaviti u sustav i promijeniti lozinku.
+
+KORISNIK može unijeti TRANSAKCIJU ('income' ili 'outcome') i postaviti stupanj prioriteta (koliko mu ta transakcija znači - 'low', 'medium', 'high').
+Može prikazati sve TRANSAKCIJE na dnevnoj/tjednoj/mjesečnoj/godišnjoj bazi te ih filtrirati po raznim kriterijima (kategorija, income, outcome, itd.). 
+Može definirati BUDŽET (max. iznos koji planira potrošiti - outcome!) te ako se približava BUDŽETU ili ga prekorači onda dobiva UPOZORENJA.
+Za UPOZORENJA/OBAVIJESTI može dobiti i savjete (na tjednoj ili mjesečnoj bazi) putem analize rashoda i stupnju prioriteta rashoda.
+KORISNIK može vidjeti statistiku svog prihoda i rashoda kroz grafičke prikaze.
+Može upravljati prihodom na način da ulaže u donacije (?) ili stavlja novac na ŠTEDNJU.
+KORISNIK također može unijeti i proizvode koje želi kupiti u svoju LISTU ŽELJA te za svaki proizvod staviti koliko mu znači za posjedovanje (stupanj prioriteta).
+
+BUDŽET sprema podatke o planiranom rashodu na tjednoj/mjesečnoj bazi po KATEGORIJAMA IN-OUT (navedi sve moguće).
+BUDŽETOM se vide razlike planiranog i stvarnog troška te ukoliko je premašen rashod tj. max. budžet KORISNIK dobiva UPOZORENJE.
+
+ŠTEDNJA služi za praćenje ušteđevine za neki proizvod na LISTI ŽELJA.
+
+LISTA ŽELJA podijeljena je u KATEGORIJE PROIZVODA (navedi sve moguće).
+
+UPOZORENJE služi za obavještavanje KORISNIKA o prekoračenju BUDŽETA i mjesečnim savjetima kako prilagoditi svoje rashode na temelju analize rashoda.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Korisnik može unijeti, urediti i izbrisati podatke o prihodu i rashodu, datumu unosa (transakcije), kategorizaciji prihoda i rashoda.
+Korisnik može masovno unositi podatke (upload Excel tablice).
+Korisnik može unositi podatke o prihodu i rashodu u raznim valutama pritom na zadržavanje glavne valute (€ ili $)
+Korisnik može vidjeti stanje svog računa, razne grafičke prikaze stanja računa, rashoda po kategorijama, i sl.
+Korisnik može vidjeti prošle transakcije na godišnjoj, mjesečnoj, tjednoj, dnevnoj razini.
+Korisnik može dodati neke troškove u "wish listu" kao npr. neki proizvod, kategorija, cijenu, prioritet (niski, srednji, visoki).
+Korisnik može pregledati proizvode po raznim filtrima: cijena, prioritet, kategorija
+Korisnik može staviti dio novca u štednju za proizvode iz "wish liste".
+Korisnik može vidjeti napredak štednje za određene proizvode iz "wish liste".
+Korisnik može vidjeti preporuke sustava za štednju i upozorenja za prekomjerno trošenje u određenoj kategoriji.
+Korisnik može dobiti obavijesti o redovnim transakcijama (npr. plaćanje računa i sl.)
+Korisnik može vidjeti izvještaj mjesečnih/godišnjih financija u PDF-u ili Excelu.
+Korisnik može odabrati preferirani način prikaza grafičkih podataka.
+Korisnik može vidjeti koliko može još potrošiti unutar dana/mjeseci na temelju unesenih budžeta.
+Korisnik može prebaciti određen iznos novca iz budžeta u fond za štednju.
+
+
+Administrator može vidjeti agregirane podatke svih korisnika (npr. statistike o najčešćim kategorijama rashoda, ukupna štednja, itd.)
+Administrator može vidjeti povijest prijava za svakog korisnika.
+
+
+Analiza nepotrebnih troškova (neke pretplate).

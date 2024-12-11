@@ -4,19 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Saving extends Model
+class Goal extends Model
 {
-    protected $table = 'savings';
+    protected $table = 'goal';
 
-    protected $primaryKey = 'saving_id';
-
+    protected $primaryKey = 'goal_id';
+    
     protected $fillable = [
         'user_id',
-        'item_id',
-        'amount_saved',
-        'created_at',
-        'updated_at'
+        'goal_cat_id',
+        'goal_name',
+        'price',
+        'priority',
+        'created_at'
     ];
+
+    protected $timestamps = false;
 
     public function user()
     {
