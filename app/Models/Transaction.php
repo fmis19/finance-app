@@ -19,7 +19,7 @@ class Transaction extends Model
         'transaction_date'
     ];
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     public function user()
     {

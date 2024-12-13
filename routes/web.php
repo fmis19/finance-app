@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,8 +16,18 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/home', function(){
-    return Inertia::render('Home');
+// Route::get('/home', function(){
+//     return Inertia::render('Home');
+// })->middleware(['auth', 'verified'])->name('home');
+
+// Test
+// Route::get('/getUsers', [AdminController::class, 'getUsers'])->middleware('auth')->name('getUsers');
+
+
+Route::middleware('auth')->group(function (){
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transaction.index');
+    Route::get('/add-transaction', [TransactionController::class, 'create'])->name('transaction.create');
+    Route::post('/store-transaction', [TransactionController::class, 'store'])->name('transaction.store');
 });
 
 Route::get('/dashboard', function () {

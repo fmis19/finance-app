@@ -44,28 +44,10 @@ INSERT INTO IN_OUT_CATS (type, name) VALUES
 
 
 -- ######################################################
-INSERT INTO PRODUCT_CATS (name) VALUES 
-('Electronics')
-('Home Appliances')
-('Furniture')
-('Cloths & Shoes')
-('Beauty and Personal Care')
-('Books and Media')
-('Sports and Outdoor')
-('Toys and Games')
-('Jewelry and Accessories')
-('Automotive')
-('Pets')
-('Travel and Luggage')
-('Kitchenware')
-('Other')
-
-
--- ################################################
-INSERT INTO SAVING_CATS (name) VALUES
-('Emergency Funds')
-('Travel')
-('Retirement')
-('Education')
-('Investments')
-('Outcome') -- # for products in wishlist
+INSERT INTO GOAL_CATS (name) VALUES 
+('Emergency Funds'),
+('Travel'),
+('Retirement'),
+('Education'),
+('Investments'),
+('Expense');

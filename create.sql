@@ -60,7 +60,7 @@ CREATE TABLE TRANSACTIONS (
   user_id INT NOT NULL,                               -- Veza prema korisniku
   in_out_cat_id INT NOT NULL,                         -- Veza prema kategoriji (income/outcome)
   amount DECIMAL(12, 2) NOT NULL,                     -- Iznos transakcije
-  description TEXT NULL,                           -- Opis transakcije
+  description TEXT NULL,                                   -- Opis transakcije
   priority ENUM('low', 'medium', 'high') NOT NULL,    -- Stupanj prioriteta
   transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Datum i vrijeme transakcije
   FOREIGN KEY (user_id) REFERENCES USERS(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
