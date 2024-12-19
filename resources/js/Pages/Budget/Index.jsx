@@ -42,7 +42,7 @@ export default function Budgets({budgets, success}){
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {columnNames ? 
-                        <TableView columnNames={columnNames} rows={budgets}/>
+                        <TableView tableType={"budget"} columnNames={columnNames} rows={budgets}/>
                         :
                         "No Budgets defined"
                     }

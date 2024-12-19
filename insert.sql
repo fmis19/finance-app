@@ -9,7 +9,7 @@ INSERT INTO IN_OUT_CATS (type, name) VALUES
 ('income', 'Freelance income'),
 ('income', 'Property sale'),
 ('income', 'Rental income'),
-('income', 'Other income'),
+('income', 'Other'),
 
 -- Expense Categories
 ('expense', 'Groceries'),

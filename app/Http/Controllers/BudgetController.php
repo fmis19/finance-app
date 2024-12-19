@@ -21,11 +21,10 @@ class BudgetController extends Controller
         $userId = Auth::user()->user_id;
 
         $budgets = DB::select("
-            SELECT name
+            SELECT budget_id as id, CONCAT(year, '-', LPAD(month, 2, '0')) as period, name, amount
             FROM budgets
             JOIN in_out_cats ON budgets.in_out_cat_id = in_out_cats.in_out_cat_id
             WHERE budgets.user_id = ?
-            GROUP BY name
         ", [$userId]);
 
         return Inertia::render('Budget/Index', [
@@ -70,9 +69,21 @@ class BudgetController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Budget $budget)
+    public function edit(Request $request)
     {
-        //
+        $budget_id = $request->route('id');
+        $user_id = Auth::user()->user_id;
+
+        $budget = DB::select("
+            SELECT * 
+            FROM budgets
+            WHERE budgets.user_id = ? 
+                AND budget_id = ?
+        ", [$user_id, $budget_id]);
+
+        return Inertia::render('Budget/Edit', [
+            "budget" => $budget
+        ]);
     }
 
     /**
@@ -86,8 +97,11 @@ class BudgetController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Budget $budget)
+    public function destroy(Request $request)
     {
-        //
+        $budget_id = $request->route('id');
+        Budget::destroy($budget_id);
+        
+        return redirect()->route('budget.index')->with('success', 'Budget was deleted.');
     }
 }

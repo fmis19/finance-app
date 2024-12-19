@@ -175,7 +175,7 @@ export default function Create({ expenses }) {
                                         className="ms-4"
                                         disabled={processing}
                                     >
-                                        Add Income
+                                        Set Budget
                                     </PrimaryButton>
                                 </div>
                             </form>

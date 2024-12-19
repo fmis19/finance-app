@@ -4,11 +4,10 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
 export default function Transactions({ transactions, success }) {
-
     // console.log(transactions);
 
     let columnNames = null;
-    if(transactions.length !== 0){
+    if (transactions.length !== 0) {
         columnNames = Object.keys(transactions[0]);
     }
     return (
@@ -40,14 +39,17 @@ export default function Transactions({ transactions, success }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    {columnNames ? 
-                        <TableView columnNames={columnNames} rows={transactions}/>
-                        :
+                    {columnNames ? (
+                        <TableView
+                            tableType={"transaction"}
+                            columnNames={columnNames}
+                            rows={transactions}
+                        />
+                    ) : (
                         "No Transactions"
-                    }
+                    )}
                 </div>
             </div>
-
         </AuthenticatedLayout>
     );
 }

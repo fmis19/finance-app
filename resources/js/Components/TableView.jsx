@@ -1,6 +1,21 @@
 import "../../css/TableView.css";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { Link, router } from "@inertiajs/react";
+import { Button } from "@headlessui/react";
 
-export default function TableView({ columnNames, rows }) {
+
+export default function TableView({ tableType, columnNames, rows }) {
+
+    const handleDelete = (id) => {
+        // console.log(id);
+        if(!window.confirm('Are you sure you want to delete the row?')){
+            return;
+        }
+
+        router.delete(route(`${tableType}.destroy`, id));
+    }
+
     return (
         <div className="responsive-table">
             <table className="min-w-full divide-y divide-gray-200 border">
@@ -31,6 +46,11 @@ export default function TableView({ columnNames, rows }) {
                                     {row[column]}
                                 </td>
                             ))}
+
+                            {/* TODO */}
+                            {/* <td><Link href={route(`${tableType}.edit`, {id: row['id']})}><EditIcon /></Link></td> */}
+                            
+                            <td><Button onClick={() => handleDelete(row['id'])}><DeleteIcon /></Button></td>
                         </tr>
                     ))}
                 </tbody>

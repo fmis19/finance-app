@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Models\InOutCat;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -18,11 +19,14 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        // $transactions = TransactionResource::collection(Transaction::where('user_id', Auth::user()->user_id)->get());
-        $transactions = DB::table('transactions')
-                            ->select('transaction_id as id', 'type', 'name', 'amount', 'description', 'priority', 'transaction_date as date')
-                            ->join('in_out_cats', 'transactions.in_out_cat_id', 'in_out_cats.in_out_cat_id')
-                            ->where('user_id', Auth::user()->user_id)->get();
+        $user_id = Auth::user()->user_id;
+        $transactions = DB::select("
+            SELECT transaction_id as id, type, name, amount, description, priority, transaction_date as date
+            FROM transactions
+            JOIN in_out_cats USING(in_out_cat_id)
+            WHERE user_id = ?
+            ORDER BY transaction_date DESC
+        ", [$user_id]);
         // dd($transactions);
         return Inertia::render('Transaction/Index', [
             "transactions" => $transactions,
@@ -47,7 +51,7 @@ class TransactionController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = Auth::user()->user_id;
-
+        // dd($data);
         Transaction::create($data);
 
         return to_route('transaction.index')->with('success', 'Transaction was added.');
@@ -64,9 +68,28 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Transaction $transaction)
+    public function edit(Request $request)
     {
-        //
+        $transaction_id = $request->route('id');
+        $user_id = Auth::user()->user_id;
+
+        $transaction = DB::select("
+            SELECT * 
+            FROM transactions
+            JOIN in_out_cats USING(in_out_cat_id)
+            WHERE transactions.user_id = ? 
+                AND transaction_id = ?
+        ", [$user_id, $transaction_id]);
+
+        $in_out_cats = DB::select("
+            SELECT * 
+            FROM in_out_cats
+        ");
+
+        return Inertia::render('Transaction/Edit', [
+            "transaction" => $transaction,
+            "in_out_cats" => $in_out_cats
+        ]);
     }
 
     /**
@@ -80,8 +103,11 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Transaction $transaction)
+    public function destroy(Request $request)
     {
-        //
+        $transaction_id = $request->route('id');
+        Transaction::destroy($transaction_id);
+        
+        return redirect()->route('transaction.index')->with('success', 'Transaction was deleted.');
     }
 }
