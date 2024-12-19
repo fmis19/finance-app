@@ -1,0 +1,16 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.responsive-table {
+    max-height: 400px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+}

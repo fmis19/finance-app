@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Models\InOutCat;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class TransactionController extends Controller
@@ -17,7 +18,12 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactions = TransactionResource::collection(Transaction::where('user_id', Auth::user()->user_id)->get());
+        // $transactions = TransactionResource::collection(Transaction::where('user_id', Auth::user()->user_id)->get());
+        $transactions = DB::table('transactions')
+                            ->select('transaction_id as id', 'type', 'name', 'amount', 'description', 'priority', 'transaction_date as date')
+                            ->join('in_out_cats', 'transactions.in_out_cat_id', 'in_out_cats.in_out_cat_id')
+                            ->where('user_id', Auth::user()->user_id)->get();
+        // dd($transactions);
         return Inertia::render('Transaction/Index', [
             "transactions" => $transactions,
             'success' => session('success')
@@ -44,7 +50,7 @@ class TransactionController extends Controller
 
         Transaction::create($data);
 
-        return to_route('transaction.index')->with('success', 'Transaction was added');
+        return to_route('transaction.index')->with('success', 'Transaction was added.');
     }
 
     /**

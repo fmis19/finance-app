@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class StoreTransactionRequest extends FormRequest
+class StoreBudgetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,8 @@ class StoreTransactionRequest extends FormRequest
         return [
             "in_out_cat_id" => ['required'],
             "amount" => ['required'],
-            "description" => ['string', 'nullable'],
-            "priority" => ['required', Rule::in(['low', 'medium', 'high'])],
+            "month" => ['required'],
+            "year" => ['required'],
         ];
     }
 }

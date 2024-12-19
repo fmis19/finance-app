@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
@@ -30,9 +32,16 @@ Route::middleware('auth')->group(function (){
     Route::post('/store-transaction', [TransactionController::class, 'store'])->name('transaction.store');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware('auth')->group(function (){
+    Route::get('/budgets', [BudgetController::class, 'index'])->name('budget.index');
+    Route::get('/set-budget', [BudgetController::class, 'create'])->name('budget.create');
+    Route::post('/store-budget', [BudgetController::class, 'store'])->name('budget.store');
+});
+
+Route::middleware(['auth', 'verified'])->group(function (){
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

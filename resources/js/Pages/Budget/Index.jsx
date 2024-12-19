@@ -3,30 +3,31 @@ import TableView from "@/Components/TableView";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
-export default function Transactions({ transactions, success }) {
-
-    // console.log(transactions);
+export default function Budgets({budgets, success}){
 
     let columnNames = null;
-    if(transactions.length !== 0){
-        columnNames = Object.keys(transactions[0]);
+    if(budgets.length !== 0){
+        columnNames = Object.keys(budgets[0]);
     }
+
+    console.log(budgets);
+
     return (
         <AuthenticatedLayout
             header={
                 <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Transactions
+                        Budgets
                     </h2>
-                    <Link href={route("transaction.create")}>
+                    <Link href={route("budget.create")}>
                         <PrimaryButton className="ms-4">
-                            Add Transaction
+                            Set Budget
                         </PrimaryButton>
                     </Link>
                 </div>
             }
         >
-            <Head title="Transactions" />
+            <Head title="Budgets" />
 
             {success && (
                 <div className="py-12">
@@ -41,9 +42,9 @@ export default function Transactions({ transactions, success }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {columnNames ? 
-                        <TableView columnNames={columnNames} rows={transactions}/>
+                        <TableView columnNames={columnNames} rows={budgets}/>
                         :
-                        "No Transactions"
+                        "No Budgets defined"
                     }
                 </div>
             </div>

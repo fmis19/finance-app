@@ -30,7 +30,7 @@ export default function Create({ incomes, expenses }) {
     });
 
     const validate = () => {
-        if (data.in_out_cat_id === 0 || data.amount === 0 || priority === "") {
+        if (data.in_out_cat_id === 0 || data.amount === 0 || data.priority === "") {
             setValidationError("Fill all required fileds.");
             return false;
         }
@@ -265,7 +265,8 @@ export default function Create({ incomes, expenses }) {
                                         placeholder={0.0}
                                         className="mt-1 block w-full"
                                         onChange={(e) =>{
-                                            setData("amount", e.target.value);
+                                            let value = parseFloat(e.target.value);
+                                            setData("amount", -Math.abs(value));
                                             setValidationError("");
                                         }}
                                     />

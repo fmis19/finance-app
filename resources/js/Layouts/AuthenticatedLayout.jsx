@@ -37,6 +37,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Transactions
                                 </NavLink>
+                                <NavLink
+                                    href={route('budget.index')}
+                                    active={route().current('budget.index')}
+                                >
+                                    Budgets
+                                </NavLink>
                             </div>
                         </div>
 
@@ -146,6 +152,12 @@ export default function AuthenticatedLayout({ header, children }) {
                             active={route().current('transaction.index')}
                         >
                             Transactions
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('budget.index')}
+                            active={route().current('budget.index')}
+                        >
+                            Budgets
                         </ResponsiveNavLink>
                     </div>
 
