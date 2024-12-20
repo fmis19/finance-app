@@ -20,40 +20,70 @@ class DashboardController extends Controller
                     ->where('user_id', $user_id)
                     ->sum('amount');
 
-        $budget_spent = DB::select("
-        SELECT name, COALESCE(ABS(SUM(transactions.amount)), 0) as spent, COALESCE(budgets.amount, 0) as amount
-            FROM in_out_cats
-            LEFT JOIN transactions ON in_out_cats.in_out_cat_id = transactions.in_out_cat_id 
-                AND transactions.user_id = ?
-                AND MONTH(transaction_date) = MONTH(CURRENT_TIMESTAMP) 
-                AND YEAR(transaction_date) = YEAR(CURRENT_TIMESTAMP)
-            LEFT JOIN budgets ON in_out_cats.in_out_cat_id = budgets.in_out_cat_id
-                AND budgets.user_id = ?
-                AND month = MONTH(CURRENT_TIMESTAMP)
-                AND year = YEAR(CURRENT_TIMESTAMP)
-            WHERE type = ?
-                AND (
-                    budgets.amount IS NOT NULL
-                    OR 
-                    transactions.amount IS NOT NULL
-                )
-            GROUP BY name, budgets.amount
-            ORDER BY name;
-        ", [$user_id, $user_id, "expense"]);
-
+        // TransactionsPart
         $transactions_made = DB::select("
             SELECT DATE(transaction_date) as date, CAST(ABS(SUM(amount)) AS FLOAT) as amount
             FROM transactions
             JOIN in_out_cats USING(in_out_cat_id)
             WHERE user_id = ?
                 AND type = ?
-            GROUP BY DATE(transaction_date);
+            GROUP BY DATE(transaction_date)
+            ORDER BY DATE(transaction_date);
         ", [$user_id, "expense"]);
+
+
+        // BudgetsPart
+        $budget_spent = DB::select("
+            SELECT SUBSTRING(DATE(transaction_date), 1, 7) as period, name, CAST(ABS(SUM(transactions.amount)) AS FLOAT) as amount
+                FROM budgets
+                JOIN transactions USING(in_out_cat_id)
+                JOIN in_out_cats USING(in_out_cat_id)
+                WHERE budgets.user_id = ?
+                    AND MONTH(transaction_date) = month
+                    AND YEAR(transaction_date) = year
+                GROUP BY name, SUBSTRING(DATE(transaction_date), 1, 7)
+                ORDER BY SUBSTRING(DATE(transaction_date), 1, 7);
+        ", [$user_id]);
+
+        // Defined budget for each month
+        $budget_defined = DB::select("
+            SELECT CONCAT(year, '-', LPAD(month, 2, '0')) as period, name, CAST(amount AS FLOAT) as amount
+                FROM budgets
+                JOIN in_out_cats USING(in_out_cat_id)
+                WHERE user_id = ?
+                ORDER BY CONCAT(year, '-', LPAD(month, 2, '0'));
+        ", [$user_id]);
+
+        $all_transactions = DB::select("
+            SELECT SUBSTRING(transaction_date, 1, 10) as date, name, CAST(amount AS FLOAT) as amount
+                FROM transactions
+                JOIN in_out_cats USING(in_out_cat_id)
+                WHERE user_id = ?
+                    AND type = ?
+                ORDER BY transaction_date
+        ", [$user_id, "expense"]);
+
+
+        // CategoriesPart
+        // Categories that are spent in each month
+        $categories_spent = DB::select("
+            SELECT SUBSTRING(transaction_date, 1, 7) as date, name, CAST(ABS(SUM(amount)) AS FLOAT) as amount
+                FROM transactions
+                JOIN in_out_cats USING(in_out_cat_id)
+                WHERE user_id = ?
+                    AND type = ?
+                GROUP BY SUBSTRING(transaction_date, 1, 7), name
+                ORDER BY date
+        ", [$user_id, "expense"]);
+
 
         return Inertia::render('Dashboard/Index', [
             "saldo" => $saldo,
+            "transactions_made" => $transactions_made,
+            "budget_defined" => $budget_defined,
             "budget_spent" => $budget_spent,
-            "transactions_made" => $transactions_made
+            "all_transactions" => $all_transactions,
+            "categories_spent" => $categories_spent,
         ]);
     }
 

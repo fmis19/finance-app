@@ -1,70 +1,112 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Link, router } from "@inertiajs/react";
 import { Gauge, gaugeClasses } from "@mui/x-charts";
-import PaginateMonthYear from "./PaginateMonthYear";
+import { useState } from "react";
 
-export default function BudgetsPart({ budget_spent }) {
+export default function BudgetsPart({ budget_defined, budget_spent, transactions }) {
+    let [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+    let [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-    const handleChildData = (data) => {
-        const month = data.currentMonth;
-        const year = data.currentYear;
-        console.log(data);
+    const goInPast = () => {
+        if (currentMonth > 1) {
+            currentMonth -= 1;
+            setCurrentMonth(currentMonth);
+        } else {
+            currentMonth = 12;
+            setCurrentMonth(currentMonth);
+            currentYear -= 1;
+            setCurrentYear(currentYear);
+        }
+    };
 
-        // router.get('/get-budgets', {month, year}, {
-        //     preserveState: true,
-        //     replace: true,
-        //     onSuccess: (response) => {
-        //         budget_spent = response.props.budget_spent; // Ažuriraj stanje budžeta
-        //     }
-        // });
+    const goInFuture = () => {
+        if (currentMonth < 12) {
+            currentMonth += 1;
+            setCurrentMonth(currentMonth);
+        } else {
+            currentMonth = 1;
+            setCurrentMonth(currentMonth);
+            currentYear += 1;
+            setCurrentYear(currentYear);
+        }
+    };
 
-        console.log(budget_spent);
+    // console.log(budget_defined, budget_spent);
+
+    let combinedBudgets = budget_defined.map((item) => {
+        const tempBudgetSpent = budget_spent.find(
+            (b) => b.period === item.period && b.name === item.name,
+        );
+        item["spent"] = tempBudgetSpent ? tempBudgetSpent["amount"] : 0;
+        return item;
+    });
+
+    let filteredBudgets = combinedBudgets.filter(
+        (b) =>
+            b.period ===
+            `${currentYear}-${String(currentMonth).padStart(2, "0")}`,
+    );
+
+    // console.log(transactions);
+
+    const showTransactionsByCategory = (category) => {
+        // console.log(category);
+        const filteredTransactions = transactions.filter(t => t.name === category && t.date.slice(0, 7) === `${currentYear}-${String(currentMonth).padStart(2, "0")}`);
+        return filteredTransactions;
     }
 
     return (
         <div className="py-12">
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <div className="p-6 text-gray-900">
-                        <div className="flex flex-col gap-10 items-center">
-                            <PaginateMonthYear sendDataToParent={handleChildData} />
-                            <div className="grid grid-cols-1 gap-4">
-                                {budget_spent.map((item, index) => (
+                    <div className="flex flex-col gap-10 items-center min-h-[80vh]">
+                        <div>Budgets</div>
+                        <div className="flex items-center gap-4">
+                            <PrimaryButton onClick={goInPast}>
+                                Past
+                            </PrimaryButton>
+                            <div>{`${currentYear}-${String(currentMonth).padStart(2, "0")}`}</div>
+                            <PrimaryButton onClick={goInFuture}>
+                                Future
+                            </PrimaryButton>
+                        </div>
+                        {filteredBudgets.length == 0 ? (
+                            "No Budgets defined."
+                        ) : (
+                            <div
+                                className={`grid md:gap-20 gap-4 ${filteredBudgets.length == 1 ? "md:grid-cols-1" : "md:grid-cols-2"}`}
+                            >
+                                {filteredBudgets.map((item, index) => (
                                     <div
                                         key={index}
                                         className="flex flex-col items-center"
                                     >
                                         <div>
-                                            <Link>
-                                                <PrimaryButton>
-                                                    {item.name}
-                                                </PrimaryButton>
-                                            </Link>
+                                            <PrimaryButton onClick={() => showTransactionsByCategory(item.name)}>
+                                                {item.name}
+                                            </PrimaryButton>
                                         </div>
                                         <Gauge
                                             width={150}
                                             height={150}
-                                            value={parseFloat(item.spent)}
+                                            value={item.spent}
                                             valueMin={0}
-                                            valueMax={
-                                                item.amount == 0
-                                                    ? Infinity
-                                                    : parseFloat(item.amount)
-                                            }
+                                            valueMax={item.amount}
                                             sx={{
-                                                [`& .${gaugeClasses.valueArc}`]: {
-                                                    fill: "#1f2937",
-                                                },
+                                                [`& .${gaugeClasses.valueArc}`]:
+                                                    {
+                                                        fill: "#1f2937",
+                                                        opacity: item.spent / item.amount
+                                                    },
                                             }}
                                             text={({ value, valueMax }) =>
-                                                `${value}€ / ${valueMax == Infinity ? `∞` : valueMax + `€`}`
+                                                `${value}€ / ${valueMax + `€`}`
                                             }
                                         />
                                     </div>
                                 ))}
-
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

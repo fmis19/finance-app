@@ -2,8 +2,16 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import TransactionsPart from "./Partials/TransactionsPart";
 import BudgetsPart from "./Partials/BudgetsPart";
+import CategoriesPart from "./CategoriesPart";
 
-export default function Dashboard({ saldo, budget_spent, transactions_made }) { 
+export default function Dashboard({ saldo, transactions_made, budget_spent, budget_defined, all_transactions, categories_spent }) { 
+
+    let transformedTransactions = transactions_made.map((item) => ({
+        date: item.date,
+        amount: parseFloat(item.amount),
+    }));
+
+    // console.log(all_transactions);
 
     return (
         <AuthenticatedLayout
@@ -25,10 +33,11 @@ export default function Dashboard({ saldo, budget_spent, transactions_made }) {
                 </div>
             </div>
 
-            <TransactionsPart transactions_made={transactions_made} />
-            
+            <CategoriesPart categories_spent={categories_spent} />
 
-            <BudgetsPart budget_spent={budget_spent} />
+            <TransactionsPart transformedTransactions={transformedTransactions} />
+
+            <BudgetsPart budget_defined={budget_defined} budget_spent={budget_spent} transactions={all_transactions} />
 
         </AuthenticatedLayout>
     );

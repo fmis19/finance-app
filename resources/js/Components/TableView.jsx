@@ -1,20 +1,18 @@
 import "../../css/TableView.css";
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link, router } from "@inertiajs/react";
 import { Button } from "@headlessui/react";
 
-
 export default function TableView({ tableType, columnNames, rows }) {
-
     const handleDelete = (id) => {
         // console.log(id);
-        if(!window.confirm('Are you sure you want to delete the row?')){
+        if (!window.confirm("Are you sure you want to delete the row?")) {
             return;
         }
 
         router.delete(route(`${tableType}.destroy`, id));
-    }
+    };
 
     return (
         <div className="responsive-table">
@@ -41,7 +39,8 @@ export default function TableView({ tableType, columnNames, rows }) {
                             {columnNames.map((column, colIndex) => (
                                 <td
                                     key={colIndex}
-                                    className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900"
+                                    // className={"px-6 py-4 whitespace-no-wrap text-sm leading-5" + (tableType === "transaction" && column === "amount") ? "text-red-600" : "text-gray-900" }
+                                    className={`px-6 py-4 whitespace-no-wrap text-sm leading-5 ${tableType === "transaction" && column === "amount" && row[column] < 0 ? "text-red-600" : tableType === "transaction" && column === "amount" ? "text-green-500" : "text-grey-900"}`}
                                 >
                                     {row[column]}
                                 </td>
@@ -49,8 +48,12 @@ export default function TableView({ tableType, columnNames, rows }) {
 
                             {/* TODO */}
                             {/* <td><Link href={route(`${tableType}.edit`, {id: row['id']})}><EditIcon /></Link></td> */}
-                            
-                            <td><Button onClick={() => handleDelete(row['id'])}><DeleteIcon /></Button></td>
+
+                            <td>
+                                <Button onClick={() => handleDelete(row["id"])}>
+                                    <DeleteIcon />
+                                </Button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
