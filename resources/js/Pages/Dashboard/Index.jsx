@@ -33,11 +33,11 @@ export default function Dashboard({ saldo, transactions_made, budget_spent, budg
                 </div>
             </div>
 
+            <BudgetsPart budget_defined={budget_defined} budget_spent={budget_spent} transactions={all_transactions} />
+
             <CategoriesPart categories_spent={categories_spent} />
 
             <TransactionsPart transformedTransactions={transformedTransactions} />
-
-            <BudgetsPart budget_defined={budget_defined} budget_spent={budget_spent} transactions={all_transactions} />
 
         </AuthenticatedLayout>
     );

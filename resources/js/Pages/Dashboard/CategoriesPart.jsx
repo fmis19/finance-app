@@ -7,6 +7,10 @@ import {
     ResponsiveContainer,
     Tooltip,
     Legend,
+    BarChart,
+    XAxis,
+    YAxis,
+    Bar,
 } from "recharts";
 
 export default function CategoriesPart({ categories_spent }) {
@@ -43,8 +47,22 @@ export default function CategoriesPart({ categories_spent }) {
             `${currentYear}-${String(currentMonth).padStart(2, "0")}`,
     );
 
-    console.log(filteredCategories);
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    filteredCategories = filteredCategories.map((c) => {
+        c.percentage =
+        (c.amount /
+            filteredCategories.reduce(
+                (total, obj) => total + obj.amount,
+                0,
+            )) *
+        100;
+
+        c.percentage = c.percentage.toFixed(2);
+        return c;
+    }).sort((c1, c2) => c2.percentage - c1.percentage);
+
+    // console.log(filteredCategories);
+
+    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
     return (
         <div className="py-12">
@@ -66,10 +84,53 @@ export default function CategoriesPart({ categories_spent }) {
                                 "No Categories."
                             ) : (
                                 <ResponsiveContainer width="100%" height={400}>
-                                    <PieChart>
+                                    <BarChart
+                                        data={filteredCategories}
+                                        margin={{
+                                            right: 10,
+                                            top: 10,
+                                            left: 0,
+                                        }}
+                                    >
+                                        {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                                        <XAxis
+                                            dataKey="name"
+                                            interval={0}
+                                            className="text-xs md:text-base"
+                                            label={{
+                                                angle: -90
+                                            }}
+                                        />
+                                        <YAxis
+                                            dataKey="percentage"
+                                            domain={[0, 100]}
+                                            label={{
+                                                value: "Percentage",
+                                                angle: -90,
+                                                offset: 15,
+                                                position: "insideLeft",
+                                                style: {
+                                                    textAnchor: "middle",
+                                                    fill: "#666",
+                                                },
+                                            }}
+                                            className="text-xs md:text-base"
+                                        />
+                                        {/* <Tooltip /> */}
+                                        {/* <Legend label={{position: 'top'}} /> */}
+                                        <Bar
+                                            dataKey="percentage"
+                                            fill="#1f2937"
+                                            label={{ 
+                                                position: "top"
+                                            }}
+                                            className="text-xs md:text-base"
+                                        />
+                                    </BarChart>
+                                    {/* <PieChart>
                                         <Pie
                                             data={filteredCategories}
-                                            dataKey="amount"
+                                            dataKey="percentage"
                                             nameKey="name"
                                             cx="50%"
                                             cy="50%"
@@ -94,7 +155,7 @@ export default function CategoriesPart({ categories_spent }) {
                                             verticalAlign="bottom"
                                             height={36}
                                         />
-                                    </PieChart>
+                                    </PieChart> */}
                                 </ResponsiveContainer>
                             )}
                         </div>
