@@ -60,7 +60,7 @@ export default function CategoriesPart({ categories_spent }) {
         return c;
     }).sort((c1, c2) => c2.percentage - c1.percentage);
 
-    // console.log(filteredCategories);
+    console.log(filteredCategories);
 
     const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
