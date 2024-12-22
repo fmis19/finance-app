@@ -22,7 +22,7 @@ class DashboardController extends Controller
 
         // TransactionsPart
         $transactions_made = DB::select("
-            SELECT DATE(transaction_date) as date, CAST(ABS(SUM(amount)) AS DECIMAL(10, 2)) as amount
+            SELECT DATE(transaction_date) as date, ABS(SUM(amount)) as amount
             FROM transactions
             JOIN in_out_cats USING(in_out_cat_id)
             WHERE user_id = ?
@@ -34,7 +34,7 @@ class DashboardController extends Controller
 
         // BudgetsPart
         $budget_spent = DB::select("
-            SELECT SUBSTRING(DATE(transaction_date), 1, 7) as period, name, CAST(ABS(SUM(transactions.amount)) AS DECIMAL(10, 2)) as amount
+            SELECT SUBSTRING(DATE(transaction_date), 1, 7) as period, name, ABS(SUM(transactions.amount)) as amount
                 FROM budgets
                 JOIN transactions USING(in_out_cat_id)
                 JOIN in_out_cats USING(in_out_cat_id)
@@ -47,7 +47,7 @@ class DashboardController extends Controller
 
         // Defined budget for each month
         $budget_defined = DB::select("
-            SELECT CONCAT(year, '-', LPAD(month, 2, '0')) as period, name, CAST(amount AS DECIMAL(10, 2)) as amount
+            SELECT CONCAT(year, '-', LPAD(month, 2, '0')) as period, name, amount
                 FROM budgets
                 JOIN in_out_cats USING(in_out_cat_id)
                 WHERE user_id = ?
@@ -55,7 +55,7 @@ class DashboardController extends Controller
         ", [$user_id]);
 
         $all_transactions = DB::select("
-            SELECT SUBSTRING(transaction_date, 1, 10) as date, name, CAST(amount AS DECIMAL(10, 2)) as amount
+            SELECT SUBSTRING(transaction_date, 1, 10) as date, name, amount
                 FROM transactions
                 JOIN in_out_cats USING(in_out_cat_id)
                 WHERE user_id = ?
@@ -67,7 +67,7 @@ class DashboardController extends Controller
         // CategoriesPart
         // Categories that are spent in each month
         $categories_spent = DB::select("
-            SELECT SUBSTRING(transaction_date, 1, 7) as date, name, CAST(ABS(SUM(amount)) AS DECIMAL(10, 2)) as amount
+            SELECT SUBSTRING(transaction_date, 1, 7) as date, name, ABS(SUM(amount)) as amount
                 FROM transactions
                 JOIN in_out_cats USING(in_out_cat_id)
                 WHERE user_id = ?
@@ -75,6 +75,31 @@ class DashboardController extends Controller
                 GROUP BY SUBSTRING(transaction_date, 1, 7), name
                 ORDER BY date
         ", [$user_id, "expense"]);
+
+        $transactions_made = collect($transactions_made)->map(function ($item) {
+            $item->amount = (float) $item->amount;
+            return $item;
+        });
+
+        $budget_defined = collect($budget_defined)->map(function ($item) {
+            $item->amount = (float) $item->amount;
+            return $item;
+        });
+
+        $budget_spent = collect($budget_spent)->map(function ($item) {
+            $item->amount = (float) $item->amount;
+            return $item;
+        });
+
+        $all_transactions = collect($all_transactions)->map(function ($item) {
+            $item->amount = (float) $item->amount;
+            return $item;
+        });
+
+        $categories_spent = collect($categories_spent)->map(function ($item) {
+            $item->amount = (float) $item->amount;
+            return $item;
+        });
 
 
         return Inertia::render('Dashboard/Index', [

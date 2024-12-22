@@ -1,1 +1,0 @@
-import{b as n}from"./transition-B_WxEbEc.js";import{r as t}from"./app-DT0HCgTo.js";function c(e){return n.isServer?null:e instanceof Node?e.ownerDocument:e!=null&&e.hasOwnProperty("current")&&e.current instanceof Node?e.current.ownerDocument:document}let o=t.createContext(void 0);function s(){return t.useContext(o)}export{s as a,c as u};

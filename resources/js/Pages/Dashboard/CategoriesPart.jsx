@@ -56,7 +56,7 @@ export default function CategoriesPart({ categories_spent }) {
             )) *
         100;
 
-        c.percentage = c.percentage.toFixed(2);
+        c.percentage = parseFloat(c.percentage.toFixed(2));
         return c;
     }).sort((c1, c2) => c2.percentage - c1.percentage);
 
