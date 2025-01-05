@@ -1,9 +1,13 @@
 import PrimaryButton from "@/Components/PrimaryButton";
-import { Link, router } from "@inertiajs/react";
 import { Gauge, gaugeClasses } from "@mui/x-charts";
 import { useState } from "react";
+import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 
-export default function BudgetsPart({ budget_defined, budget_spent, transactions }) {
+export default function BudgetsPart({
+    budget_defined,
+    budget_spent,
+    transactions,
+}) {
     let [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
     let [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
@@ -50,10 +54,14 @@ export default function BudgetsPart({ budget_defined, budget_spent, transactions
     // console.log(transactions);
 
     const showTransactionsByCategory = (category) => {
-        // console.log(category);
-        const filteredTransactions = transactions.filter(t => t.name === category && t.date.slice(0, 7) === `${currentYear}-${String(currentMonth).padStart(2, "0")}`);
+        const filteredTransactions = transactions.filter(
+            (t) =>
+                t.name === category &&
+                t.date.slice(0, 7) ===
+                    `${currentYear}-${String(currentMonth).padStart(2, "0")}`,
+        );
         return filteredTransactions;
-    }
+    };
 
     return (
         <div className="py-12">
@@ -61,14 +69,22 @@ export default function BudgetsPart({ budget_defined, budget_spent, transactions
                 <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="flex flex-col gap-10 items-center min-h-[80vh]">
                         <div>Budgets</div>
-                        <div className="flex items-center gap-4">
-                            <PrimaryButton onClick={goInPast}>
-                                Past
-                            </PrimaryButton>
-                            <div>{`${currentYear}-${String(currentMonth).padStart(2, "0")}`}</div>
-                            <PrimaryButton onClick={goInFuture}>
-                                Future
-                            </PrimaryButton>
+                        <div className="flex flex-col items-center">
+                            <div className="flex items-center gap-4">
+                                <PrimaryButton
+                                    onClick={goInPast}
+                                    className="w-[90px] flex justify-center"
+                                >
+                                    Past
+                                </PrimaryButton>
+                                <PrimaryButton
+                                    onClick={goInFuture}
+                                    className="w-[90px] flex justify-center"
+                                >
+                                    Future
+                                </PrimaryButton>
+                            </div>
+                            <div className="flex items-center">{`${currentYear}-${String(currentMonth).padStart(2, "0")}`}</div>
                         </div>
                         {filteredBudgets.length == 0 ? (
                             "No Budgets defined."
@@ -82,7 +98,13 @@ export default function BudgetsPart({ budget_defined, budget_spent, transactions
                                         className="flex flex-col items-center"
                                     >
                                         <div>
-                                            <PrimaryButton onClick={() => showTransactionsByCategory(item.name)}>
+                                            <PrimaryButton
+                                                onClick={() =>
+                                                    showTransactionsByCategory(
+                                                        item.name,
+                                                    )
+                                                }
+                                            >
                                                 {item.name}
                                             </PrimaryButton>
                                         </div>
@@ -100,7 +122,7 @@ export default function BudgetsPart({ budget_defined, budget_spent, transactions
                                                     },
                                             }}
                                             text={({ value, valueMax }) =>
-                                                `${value}€ / ${valueMax + `€`}`
+                                                `${value}€/\n${valueMax + `€`}`
                                             }
                                         />
                                     </div>

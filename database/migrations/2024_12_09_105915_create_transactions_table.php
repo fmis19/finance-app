@@ -15,7 +15,7 @@ return new class extends Migration
             amount DECIMAL(12, 2) NOT NULL,                     -- Iznos transakcije
             description TEXT NULL,                                   -- Opis transakcije
             priority ENUM('low', 'medium', 'high') NOT NULL,    -- Stupanj prioriteta
-            transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Datum i vrijeme transakcije
+            transaction_date DATE NOT NULL, -- Datum i vrijeme transakcije
             FOREIGN KEY (user_id) REFERENCES USERS(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
             FOREIGN KEY (in_out_cat_id) REFERENCES IN_OUT_CATS(in_out_cat_id) ON DELETE CASCADE ON UPDATE CASCADE
             );

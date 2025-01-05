@@ -39,8 +39,19 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        $incomes = InOutCat::where('type', 'income')->get();
-        $expenses = InOutCat::where('type', 'expense')->get();
+
+        $incomes = DB::select("
+            SELECT * 
+            FROM in_out_cats
+            WHERE type = ?
+            ORDER BY name
+        ", ["income"]);
+        $expenses = DB::select("
+            SELECT * 
+            FROM in_out_cats
+            WHERE type = ?
+            ORDER BY name
+        ", ["expense"]);
         return Inertia::render('Transaction/Create', ['incomes' => $incomes, 'expenses' => $expenses]);
     }
 

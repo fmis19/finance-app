@@ -76,32 +76,6 @@ class DashboardController extends Controller
                 ORDER BY date
         ", [$user_id, "expense"]);
 
-        $transactions_made = collect($transactions_made)->map(function ($item) {
-            $item->amount = (float) $item->amount;
-            return $item;
-        });
-
-        $budget_defined = collect($budget_defined)->map(function ($item) {
-            $item->amount = (float) $item->amount;
-            return $item;
-        });
-
-        $budget_spent = collect($budget_spent)->map(function ($item) {
-            $item->amount = (float) $item->amount;
-            return $item;
-        });
-
-        $all_transactions = collect($all_transactions)->map(function ($item) {
-            $item->amount = (float) $item->amount;
-            return $item;
-        });
-
-        $categories_spent = collect($categories_spent)->map(function ($item) {
-            $item->amount = (float) $item->amount;
-            return $item;
-        });
-
-
         return Inertia::render('Dashboard/Index', [
             "saldo" => $saldo,
             "transactions_made" => $transactions_made,

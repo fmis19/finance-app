@@ -81,6 +81,9 @@ export default function TransactionsPart({ transformedTransactions }) {
         currentWeek,
     );
 
+    console.log(formattedTransactions);
+    console.log(transformedTransactions);
+
     const goInPast = () => {
         setWeekOffset((prev) => prev - 1);
         setCurrentWeek(generateWeek(weekOffset - 1));
@@ -97,14 +100,16 @@ export default function TransactionsPart({ transformedTransactions }) {
                 <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="flex flex-col gap-10 items-center">
                         <div>Transactions</div>
-                        <div className="flex items-center gap-4">
-                            <PrimaryButton onClick={goInPast}>
-                                Past
-                            </PrimaryButton>
+                        <div className="flex flex-col items-center">
+                            <div className="flex items-center gap-4">
+                                <PrimaryButton onClick={goInPast} className="w-[90px] flex justify-center">
+                                    Past
+                                </PrimaryButton>
+                                <PrimaryButton onClick={goInFuture} className="w-[90px] flex justify-center">
+                                    Future
+                                </PrimaryButton>
+                            </div>
                             <div>{`${currentWeek.monday.toDateString()} - ${currentWeek.sunday.toDateString()}`}</div>
-                            <PrimaryButton onClick={goInFuture}>
-                                Future
-                            </PrimaryButton>
                         </div>
                         <div className="flex justify-center w-full">
                             <ResponsiveContainer width="100%" height={400}>

@@ -60,7 +60,7 @@ export default function CategoriesPart({ categories_spent }) {
         return c;
     }).sort((c1, c2) => c2.percentage - c1.percentage);
 
-    console.log(filteredCategories);
+    // console.log(filteredCategories);
 
     const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -70,64 +70,23 @@ export default function CategoriesPart({ categories_spent }) {
                 <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="flex flex-col gap-10 items-center">
                         <div>Categories</div>
-                        <div className="flex items-center gap-4">
-                            <PrimaryButton onClick={goInPast}>
-                                Past
-                            </PrimaryButton>
-                            <div>{`${currentYear}-${String(currentMonth).padStart(2, "0")}`}</div>
-                            <PrimaryButton onClick={goInFuture}>
-                                Future
-                            </PrimaryButton>
+                        <div className="flex flex-col items-center">
+                            <div className="flex items-center gap-4">
+                                <PrimaryButton onClick={goInPast} className="w-[90px] flex justify-center">
+                                    Past
+                                </PrimaryButton>
+                                <PrimaryButton onClick={goInFuture} className="w-[90px] flex justify-center">
+                                    Future
+                                </PrimaryButton>
+                            </div>
+                            <div className="flex items-center">{`${currentYear}-${String(currentMonth).padStart(2, "0")}`}</div>
                         </div>
                         <div className="flex justify-center w-full min-h-[400px]">
                             {filteredCategories.length === 0 ? (
                                 "No Categories."
                             ) : (
-                                <ResponsiveContainer width="100%" height={400}>
-                                    <BarChart
-                                        data={filteredCategories}
-                                        margin={{
-                                            right: 10,
-                                            top: 10,
-                                            left: 0,
-                                        }}
-                                    >
-                                        {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                                        <XAxis
-                                            dataKey="name"
-                                            interval={0}
-                                            className="text-xs md:text-base"
-                                            label={{
-                                                angle: -90
-                                            }}
-                                        />
-                                        <YAxis
-                                            dataKey="percentage"
-                                            domain={[0, 100]}
-                                            label={{
-                                                value: "Percentage",
-                                                angle: -90,
-                                                offset: 15,
-                                                position: "insideLeft",
-                                                style: {
-                                                    textAnchor: "middle",
-                                                    fill: "#666",
-                                                },
-                                            }}
-                                            className="text-xs md:text-base"
-                                        />
-                                        {/* <Tooltip /> */}
-                                        {/* <Legend label={{position: 'top'}} /> */}
-                                        <Bar
-                                            dataKey="percentage"
-                                            fill="#1f2937"
-                                            label={{ 
-                                                position: "top"
-                                            }}
-                                            className="text-xs md:text-base"
-                                        />
-                                    </BarChart>
-                                    {/* <PieChart>
+                                <ResponsiveContainer width="100%" minHeight={400}>
+                                    <PieChart width="100%" height="100%">
                                         <Pie
                                             data={filteredCategories}
                                             dataKey="percentage"
@@ -136,7 +95,7 @@ export default function CategoriesPart({ categories_spent }) {
                                             cy="50%"
                                             outerRadius="70%"
                                             fill="#8884d8"
-                                            label
+                                            // label
                                         >
                                             {filteredCategories.map((entry, index) => (
                                                 <Cell
@@ -152,10 +111,14 @@ export default function CategoriesPart({ categories_spent }) {
                                         </Pie>
                                         <Tooltip />
                                         <Legend
-                                            verticalAlign="bottom"
-                                            height={36}
+                                            layout="vertical"
+                                            verticalAlign="top"
+                                            formatter={(value) => {
+                                                const category = filteredCategories.find(cat => cat.name === value);
+                                                return `${value} (${category?.percentage}%)`;
+                                            }}
                                         />
-                                    </PieChart> */}
+                                    </PieChart>
                                 </ResponsiveContainer>
                             )}
                         </div>

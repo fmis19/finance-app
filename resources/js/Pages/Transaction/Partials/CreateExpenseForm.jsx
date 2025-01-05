@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function CreateExpenseForm({ expenses }) {
     const now = new Date()
         .toLocaleString("sv-SE", { timeZoneName: "short" })
-        .slice(0, 16);
+        .slice(0, 10);
 
     const priorities = ["low", "medium", "high"];
     const [validationError, setValidationError] = useState("");
@@ -35,6 +35,7 @@ export default function CreateExpenseForm({ expenses }) {
 
     const validate = () => {
         if (
+            data.transaction_date === "" ||
             data.in_out_cat_id === 0 ||
             data.amount === 0 ||
             data.priority === "-"
@@ -69,17 +70,16 @@ export default function CreateExpenseForm({ expenses }) {
             </header>
             <form className="mt-6 space-y-6" onSubmit={addExpense}>
                 <div className="mt-4">
-                    <InputLabel htmlFor="date_time" value="Date Time" />
+                    <InputLabel htmlFor="date" value="Date Time" />
 
                     <TextInput
                         id="date_time"
-                        type="datetime-local"
-                        name="date_time"
-                        value={data.transaction_date.slice(0, 16)}
+                        type="date"
+                        name="date"
+                        value={data.transaction_date}
                         className="mt-1 block w-full"
                         onChange={(e) => {
-                            let formatedDateTime = e.target.value.split('T').join(' ').concat(':00');
-                            setData("transaction_date", formatedDateTime);
+                            setData("transaction_date", e.target.value);
                             setValidationError("");
                         }}
                     />

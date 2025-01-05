@@ -11,7 +11,22 @@ export default function Dashboard({ saldo, transactions_made, budget_spent, budg
         amount: parseFloat(item.amount),
     }));
 
-    // console.log(all_transactions);
+    budget_spent.map((b) => {
+        b.amount = parseFloat(b.amount);
+    })
+
+    all_transactions.map((t) => {
+        t.amount = parseFloat(t.amount);
+    })
+
+    budget_defined.map((b) => {
+        b.amount = parseFloat(b.amount);
+        b.spent = parseFloat(b.spent);
+    })
+
+    categories_spent.map((c) => {
+        c.amount = parseFloat(c.amount);
+    })
 
     return (
         <AuthenticatedLayout

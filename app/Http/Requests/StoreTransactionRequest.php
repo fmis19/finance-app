@@ -28,7 +28,7 @@ class StoreTransactionRequest extends FormRequest
             "amount" => ['required'],
             "description" => ['string', 'nullable'],
             "priority" => ['required', Rule::in(['low', 'medium', 'high'])],
-            "transaction_date" => ['date_format:Y-m-d H:i:s']
+            "transaction_date" => ['required', 'date_format:Y-m-d']
         ];
     }
 }
