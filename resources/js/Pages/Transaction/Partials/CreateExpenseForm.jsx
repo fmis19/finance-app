@@ -52,8 +52,6 @@ export default function CreateExpenseForm({ expenses }) {
         if (!validate()) {
             return;
         }
-
-        console.log(data);
         post(route("transaction.store"));
     };
 

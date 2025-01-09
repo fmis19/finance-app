@@ -4,7 +4,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
 export default function Transactions({ transactions, success }) {
-    // console.log(transactions);
 
     let columnNames = null;
     if (transactions.length !== 0) {

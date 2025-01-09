@@ -10,8 +10,6 @@ export default function Budgets({budgets, success}){
         columnNames = Object.keys(budgets[0]);
     }
 
-    console.log(budgets);
-
     return (
         <AuthenticatedLayout
             header={

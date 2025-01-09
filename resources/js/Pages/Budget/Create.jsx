@@ -8,10 +8,6 @@ import { useState } from "react";
 
 export default function Create({ expenses }) {
     const [validationError, setValidationError] = useState("");
-    // post for sending request
-    // processing -> is form in processing mode or not
-    // errors
-    // reset function to reset the form
     const {
         data,
         setData,
@@ -27,8 +23,6 @@ export default function Create({ expenses }) {
         year: "",
     });
 
-    // console.log(expenses);
-
     const validate = () => {
         if (data.in_out_cat_id === "" || data.amount === "" || data.month === "" || data.year === "") {
             setValidationError("Fill all required fileds.");
@@ -43,7 +37,6 @@ export default function Create({ expenses }) {
         if(!validate()){
             return;
         }
-        // console.log(data);
         post(route('budget.store'));
     };
 

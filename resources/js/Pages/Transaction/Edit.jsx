@@ -4,7 +4,6 @@ import UpdateTransactionForm from './Partials/UpdateTransactionForm';
 
 export default function Edit({ transaction, in_out_cats, status }) {
 
-    console.log(transaction);
     return (
         <AuthenticatedLayout
             header={

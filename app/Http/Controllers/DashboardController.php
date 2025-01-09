@@ -21,7 +21,7 @@ class DashboardController extends Controller
                     ->sum('amount');
 
         // TransactionsPart
-        $transactions_made = DB::select("
+        $expenses_made = DB::select("
             SELECT DATE(transaction_date) as date, ABS(SUM(amount)) as amount
             FROM transactions
             JOIN in_out_cats USING(in_out_cat_id)
@@ -30,6 +30,16 @@ class DashboardController extends Controller
             GROUP BY DATE(transaction_date)
             ORDER BY DATE(transaction_date);
         ", [$user_id, "expense"]);
+
+        $incomes_made = DB::select("
+            SELECT DATE(transaction_date) as date, ABS(SUM(amount)) as amount
+            FROM transactions
+            JOIN in_out_cats USING(in_out_cat_id)
+            WHERE user_id = ?
+                AND type = ?
+            GROUP BY DATE(transaction_date)
+            ORDER BY DATE(transaction_date);
+        ", [$user_id, "income"]);
 
 
         // BudgetsPart
@@ -78,7 +88,8 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard/Index', [
             "saldo" => $saldo,
-            "transactions_made" => $transactions_made,
+            "expenses_made" => $expenses_made,
+            "incomes_made" => $incomes_made,
             "budget_defined" => $budget_defined,
             "budget_spent" => $budget_spent,
             "all_transactions" => $all_transactions,

@@ -2,11 +2,16 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import TransactionsPart from "./Partials/TransactionsPart";
 import BudgetsPart from "./Partials/BudgetsPart";
-import CategoriesPart from "./CategoriesPart";
+import CategoriesPart from "./Partials/CategoriesPart";
 
-export default function Dashboard({ saldo, transactions_made, budget_spent, budget_defined, all_transactions, categories_spent }) { 
+export default function Dashboard({ saldo, expenses_made, incomes_made, budget_spent, budget_defined, all_transactions, categories_spent }) { 
 
-    let transformedTransactions = transactions_made.map((item) => ({
+    let transformedExpenses = expenses_made.map((item) => ({
+        date: item.date,
+        amount: parseFloat(item.amount),
+    }));
+
+    let transformedIncomes = incomes_made.map((item) => ({
         date: item.date,
         amount: parseFloat(item.amount),
     }));
@@ -38,21 +43,12 @@ export default function Dashboard({ saldo, transactions_made, budget_spent, budg
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            {`Saldo: ${saldo}€`}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <BudgetsPart budget_defined={budget_defined} budget_spent={budget_spent} transactions={all_transactions} />
+            <TransactionsPart transformedExpenses={transformedExpenses} transformedIncomes={transformedIncomes} />
 
             <CategoriesPart categories_spent={categories_spent} />
 
-            <TransactionsPart transformedTransactions={transformedTransactions} />
+            <BudgetsPart budget_defined={budget_defined} budget_spent={budget_spent} transactions={all_transactions} />
+
 
         </AuthenticatedLayout>
     );

@@ -1,4 +1,5 @@
 import PrimaryButton from "@/Components/PrimaryButton";
+import { Link } from "@inertiajs/react";
 import { Gauge, gaugeClasses } from "@mui/x-charts";
 import { useState } from "react";
 import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
@@ -68,7 +69,7 @@ export default function BudgetsPart({
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="flex flex-col gap-10 items-center min-h-[80vh]">
-                        <div>Budgets</div>
+                        <div>Budget spent (monthly)</div>
                         <div className="flex flex-col items-center">
                             <div className="flex items-center gap-4">
                                 <PrimaryButton
@@ -84,10 +85,15 @@ export default function BudgetsPart({
                                     Future
                                 </PrimaryButton>
                             </div>
-                            <div className="flex items-center">{`${currentYear}-${String(currentMonth).padStart(2, "0")}`}</div>
+                            <div className="flex items-center">{`${String(currentMonth).padStart(2, "0")}-${currentYear}`}</div>
+                            <Link href={route("budget.create")}>
+                                <PrimaryButton>
+                                    Add Budget
+                                </PrimaryButton>
+                            </Link>
                         </div>
                         {filteredBudgets.length == 0 ? (
-                            "No Budgets defined."
+                            "No budgets defined."
                         ) : (
                             <div
                                 className={`grid md:gap-20 gap-4 ${filteredBudgets.length == 1 ? "md:grid-cols-1" : "md:grid-cols-2"}`}

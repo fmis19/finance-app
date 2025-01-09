@@ -3,7 +3,6 @@ import { Head } from '@inertiajs/react';
 
 export default function Edit({ budget, status }) {
 
-    console.log(budget);
     return (
         <AuthenticatedLayout
             header={
