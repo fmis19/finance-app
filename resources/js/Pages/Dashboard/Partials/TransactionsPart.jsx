@@ -111,6 +111,8 @@ export default function TransactionsPart({ transformedExpenses, transformedIncom
         currentWeek,
     );
 
+    console.log(filteredExpenses);
+
     const goInPast = () => {
         setWeekOffset((prev) => prev - 1);
         setCurrentWeek(generateWeek(weekOffset - 1));

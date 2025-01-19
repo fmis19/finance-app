@@ -16,85 +16,104 @@ class DashboardController extends Controller
     {
         $user_id = Auth::user()->user_id;
 
-        $saldo = DB::table('transactions')
-                    ->where('user_id', $user_id)
-                    ->sum('amount');
+        // dd(Auth::user()->role);
+        $role = Auth::user()->role;
 
-        // TransactionsPart
-        $expenses_made = DB::select("
-            SELECT DATE(transaction_date) as date, ABS(SUM(amount)) as amount
-            FROM transactions
-            JOIN in_out_cats USING(in_out_cat_id)
-            WHERE user_id = ?
-                AND type = ?
-            GROUP BY DATE(transaction_date)
-            ORDER BY DATE(transaction_date);
-        ", [$user_id, "expense"]);
+        if($role == "admin"){
+            $users = DB::table("users")
+                        ->select("name", "surname", "email", "email_verified_at")
+                        ->where("role", "!=", "admin")
+                        ->get();
 
-        $incomes_made = DB::select("
-            SELECT DATE(transaction_date) as date, ABS(SUM(amount)) as amount
-            FROM transactions
-            JOIN in_out_cats USING(in_out_cat_id)
-            WHERE user_id = ?
-                AND type = ?
-            GROUP BY DATE(transaction_date)
-            ORDER BY DATE(transaction_date);
-        ", [$user_id, "income"]);
+            // dd($users);
 
-
-        // BudgetsPart
-        $budget_spent = DB::select("
-            SELECT SUBSTRING(DATE(transaction_date), 1, 7) as period, name, ABS(SUM(transactions.amount)) as amount
-                FROM budgets
-                JOIN transactions USING(in_out_cat_id)
-                JOIN in_out_cats USING(in_out_cat_id)
-                WHERE budgets.user_id = ?
-                    AND MONTH(transaction_date) = month
-                    AND YEAR(transaction_date) = year
-                GROUP BY name, SUBSTRING(DATE(transaction_date), 1, 7)
-                ORDER BY SUBSTRING(DATE(transaction_date), 1, 7);
-        ", [$user_id]);
-
-        // Defined budget for each month
-        $budget_defined = DB::select("
-            SELECT CONCAT(year, '-', LPAD(month, 2, '0')) as period, name, amount
-                FROM budgets
-                JOIN in_out_cats USING(in_out_cat_id)
-                WHERE user_id = ?
-                ORDER BY CONCAT(year, '-', LPAD(month, 2, '0'));
-        ", [$user_id]);
-
-        $all_transactions = DB::select("
-            SELECT SUBSTRING(transaction_date, 1, 10) as date, name, amount
+            // return Inertia::render("Dashboard/Index", [
+            //     "role" => $role
+            // ]);
+        }
+        else if($role == "user"){
+            $saldo = DB::table('transactions')
+                        ->where('user_id', $user_id)
+                        ->sum('amount');
+    
+            // TransactionsPart
+            $expenses_made = DB::select("
+                SELECT DATE(transaction_date) as date, ABS(SUM(amount)) as amount
                 FROM transactions
                 JOIN in_out_cats USING(in_out_cat_id)
                 WHERE user_id = ?
                     AND type = ?
-                ORDER BY transaction_date
-        ", [$user_id, "expense"]);
-
-
-        // CategoriesPart
-        // Categories that are spent in each month
-        $categories_spent = DB::select("
-            SELECT SUBSTRING(transaction_date, 1, 7) as date, name, ABS(SUM(amount)) as amount
+                GROUP BY DATE(transaction_date)
+                ORDER BY DATE(transaction_date);
+            ", [$user_id, "expense"]);
+    
+            $incomes_made = DB::select("
+                SELECT DATE(transaction_date) as date, ABS(SUM(amount)) as amount
                 FROM transactions
                 JOIN in_out_cats USING(in_out_cat_id)
                 WHERE user_id = ?
                     AND type = ?
-                GROUP BY SUBSTRING(transaction_date, 1, 7), name
-                ORDER BY date
-        ", [$user_id, "expense"]);
+                GROUP BY DATE(transaction_date)
+                ORDER BY DATE(transaction_date);
+            ", [$user_id, "income"]);
+    
+    
+            // BudgetsPart
+            $budget_spent = DB::select("
+                SELECT SUBSTRING(DATE(transaction_date), 1, 7) as period, name, ABS(SUM(transactions.amount)) as amount
+                    FROM budgets
+                    JOIN transactions USING(in_out_cat_id)
+                    JOIN in_out_cats USING(in_out_cat_id)
+                    WHERE budgets.user_id = ?
+                        AND MONTH(transaction_date) = month
+                        AND YEAR(transaction_date) = year
+                    GROUP BY name, SUBSTRING(DATE(transaction_date), 1, 7)
+                    ORDER BY SUBSTRING(DATE(transaction_date), 1, 7);
+            ", [$user_id]);
+    
+            // Defined budget for each month
+            $budget_defined = DB::select("
+                SELECT CONCAT(year, '-', LPAD(month, 2, '0')) as period, name, amount
+                    FROM budgets
+                    JOIN in_out_cats USING(in_out_cat_id)
+                    WHERE user_id = ?
+                    ORDER BY CONCAT(year, '-', LPAD(month, 2, '0'));
+            ", [$user_id]);
+    
+            $all_transactions = DB::select("
+                SELECT SUBSTRING(transaction_date, 1, 10) as date, name, amount
+                    FROM transactions
+                    JOIN in_out_cats USING(in_out_cat_id)
+                    WHERE user_id = ?
+                        AND type = ?
+                    ORDER BY transaction_date
+            ", [$user_id, "expense"]);
+    
+    
+            // CategoriesPart
+            // Categories that are spent in each month
+            $categories_spent = DB::select("
+                SELECT SUBSTRING(transaction_date, 1, 7) as date, name, ABS(SUM(amount)) as amount
+                    FROM transactions
+                    JOIN in_out_cats USING(in_out_cat_id)
+                    WHERE user_id = ?
+                        AND type = ?
+                    GROUP BY SUBSTRING(transaction_date, 1, 7), name
+                    ORDER BY date
+            ", [$user_id, "expense"]);
+    
+            return Inertia::render('Dashboard/Index', [
+                "saldo" => $saldo,
+                "expenses_made" => $expenses_made,
+                "incomes_made" => $incomes_made,
+                "budget_defined" => $budget_defined,
+                "budget_spent" => $budget_spent,
+                "all_transactions" => $all_transactions,
+                "categories_spent" => $categories_spent,
+            ]);
 
-        return Inertia::render('Dashboard/Index', [
-            "saldo" => $saldo,
-            "expenses_made" => $expenses_made,
-            "incomes_made" => $incomes_made,
-            "budget_defined" => $budget_defined,
-            "budget_spent" => $budget_spent,
-            "all_transactions" => $all_transactions,
-            "categories_spent" => $categories_spent,
-        ]);
+        }
+
     }
 
     public function getTransactions(Request $request){

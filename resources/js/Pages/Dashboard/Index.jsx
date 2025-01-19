@@ -43,11 +43,14 @@ export default function Dashboard({ saldo, expenses_made, incomes_made, budget_s
         >
             <Head title="Dashboard" />
 
-            <TransactionsPart transformedExpenses={transformedExpenses} transformedIncomes={transformedIncomes} />
+            <div className="grid md:grid-cols-2">
+                <TransactionsPart transformedExpenses={transformedExpenses} transformedIncomes={transformedIncomes} />
 
-            <CategoriesPart categories_spent={categories_spent} />
+                <CategoriesPart categories_spent={categories_spent} />
 
-            <BudgetsPart budget_defined={budget_defined} budget_spent={budget_spent} transactions={all_transactions} />
+                <BudgetsPart budget_defined={budget_defined} budget_spent={budget_spent} transactions={all_transactions} />
+            </div>
+
 
 
         </AuthenticatedLayout>

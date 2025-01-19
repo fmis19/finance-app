@@ -1,35 +1,26 @@
-import PrimaryButton from "@/Components/PrimaryButton";
-import { Head, Link } from "@inertiajs/react";
+import Login from "./Auth/Login";
+import Register from "./Auth/Register";
+import "../../css/rotation.css";
+import FlipCard from "@/Components/FlipCard";
 
-export default function Welcome({auth}){
-    return(
-        <>
-            <Head title="Welcome" />
+export default function Welcome() {
+    return (
+        <div className="bg-gray-100 h-dvh">
             <div className="flex justify-center py-10">
-                Welcome to $$$-app!
+                Welcome to $-app!
             </div>
-            {auth.user ? 
-                <div className="flex flex-col place-items-center">
-                    <Link href={route('dashboard')}>
-                        <PrimaryButton>
-                            Dashboard
-                        </PrimaryButton>
-                    </Link> 
-                </div>
-                :
-                <div className="flex flex-col place-items-center gap-3">
-                    <Link href={route('login')}>
-                        <PrimaryButton className="w-[100px] flex justify-center">
-                            Login
-                        </PrimaryButton>
-                    </Link>
-                    <Link href={route('register')}>
-                        <PrimaryButton className="w-[100px] flex justify-center">
-                            Register
-                        </PrimaryButton>
-                    </Link>
-                </div>
-            }
-        </>
+            <div className="flex flex-col place-items-center">
+                <FlipCard frontButtonText={"You don't have account? Register."} backButtonText={"Already registered? Login."} className={"w-[320px] h-[400px]"}>
+                    <div>
+                        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+                        <Login side={"front-side"}/>
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
+                        <Register side={"back-side"} />
+                    </div>
+                </FlipCard>
+            </div>
+        </div>
     );
-};
+}

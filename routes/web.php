@@ -26,7 +26,7 @@ Route::get('/', function () {
 // Route::get('/getUsers', [AdminController::class, 'getUsers'])->middleware('auth')->name('getUsers');
 
 
-Route::middleware('auth')->group(function (){
+Route::middleware(['auth', 'verified', 'role:user'])->group(function (){
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transaction.index');
     Route::get('/edit-transaction/{id}', [TransactionController::class, 'edit'])->name('transaction.edit');
     Route::get('/add-transaction', [TransactionController::class, 'create'])->name('transaction.create');
@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function (){
     Route::delete('/destroy-transaction/{id}', [TransactionController::class, 'destroy'])->name('transaction.destroy');
 });
 
-Route::middleware('auth')->group(function (){
+Route::middleware(['auth', 'verified', 'role:user'])->group(function (){
     Route::get('/budgets', [BudgetController::class, 'index'])->name('budget.index');
     Route::get('/edit-budget/{id}', [BudgetController::class, 'edit'])->name('budget.edit');
     Route::get('/set-budget', [BudgetController::class, 'create'])->name('budget.create');
@@ -42,13 +42,13 @@ Route::middleware('auth')->group(function (){
     Route::delete('/destroy-budget/{id}', [BudgetController::class, 'destroy'])->name('budget.destroy');
 });
 
-Route::middleware(['auth', 'verified'])->group(function (){
+Route::middleware(['auth', 'verified', 'role:user'])->group(function (){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/get-budgets', [DashboardController::class, 'getBudgets'])->name('get-budgets');
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

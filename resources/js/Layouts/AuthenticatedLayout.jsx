@@ -18,9 +18,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
-                                <Link href="/">
+                                <Link href={route('dashboard')}>
                                     {/* <img src="../../images/logo.png" alt="Logo" /> */}
-                                    $$$-app
+                                    $-app
                                 </Link>
                             </div>
 

@@ -40,7 +40,7 @@ export default function CreateIncomeForm({ incomes }) {
             data.amount === 0 ||
             data.priority === "-"
         ) {
-            setValidationError("Fill all required fileds.");
+            setValidationError("Fill all required fields.");
             return false;
         }
         return true;
